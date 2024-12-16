@@ -1,0 +1,57 @@
+import random
+import time
+import sys
+sys.setrecursionlimit(10**6)
+
+def partition(A, p, r):
+    i = p - 1
+    j = p
+
+    while (j <= r - 1):
+        if A[j] <= A[r]:
+            i += 1
+            temp = A[j]
+            A[j] = A[i]
+            A[i] = temp
+            j += 1
+        else:
+            j += 1
+
+    temp = A[i + 1]
+    A[i + 1] = A[r]
+    A[r] = temp
+    return i + 1
+
+
+def qsort(A, p, r):
+    if p < r:
+        q = partition(A, p, r)
+        qsort(A, p, q - 1)
+        qsort(A, q + 1, r)
+
+def main():
+    array = []
+    for i in range(100):
+        array.append(random.randint(0, 100))
+    
+    print(array)
+    time1 = time.time()
+    qsort(array, 0, len(array) - 1)
+    
+    time2 = time.time()
+
+    print(f"{time2 - time1:.10f}")
+    print(array)
+
+def sort(size):
+    print("QuickSort algorithm. size: ", size)
+    array = []
+    for i in range(size):
+        array.append(random.randint(0, 200))
+    start = time.time()
+    qsort(array, 0, len(array) - 1)
+    end = time.time()
+    print(f"{end - start:.10f}")
+
+if __name__ == "__main__":
+    main()
