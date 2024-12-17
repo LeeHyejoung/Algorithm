@@ -1,0 +1,96 @@
+import random
+import time
+import math
+
+def swap(a, b):
+    temp = a
+    a = b
+    b = temp
+
+    return a, b
+
+def partition(A, low, high):
+    if A[low] > A[high]:
+        A[low], A[high] = swap(A[low], A[high])
+
+    k = low + 1
+    l = low
+    g = high
+
+    while (k < g):
+        if A[k] > A[high]:
+            g -= 1
+            A[k], A[g] = swap(A[k], A[g])
+            continue
+        elif A[k] < A[low]:
+            l += 1
+            A[l], A[k] = swap(A[l], A[k])
+        k += 1
+
+    A[l], A[low] = swap(A[l], A[low])
+    A[g], A[high] = swap(A[g], A[high])
+
+    return l, g
+
+def insertionSort(A, p, r):
+    i = p + 1
+    while (i <= r):
+        #print(A)
+        j = p
+        m = 1
+        while (j < i):
+            if A[j] > A[i]: 
+                break
+            j += 1
+        m = A[i]
+        k = i
+        while (k > j):
+            A[k] = A[k - 1]
+            k -= 1
+        
+        A[j] = m
+        i += 1
+    pass
+
+def dqsort(A, p, r, n):
+    if p < r:
+        l, g = partition(A, p, r)
+        if (l - 1 - p < n):
+            insertionSort(A, p, l - 1)
+        else:
+            dqsort(A, p, l - 1, n)
+        if (g - 1 - l - 1 < n):
+            insertionSort(A, l + 1, g - 1)
+        else:
+            dqsort(A, l + 1, g - 1, n)
+        if (r - g - 1 < n):
+            insertionSort(A, g + 1, r)
+        else:
+            dqsort(A, g + 1, r, n)
+
+def main():
+    array = []
+    for i in range(20):
+        array.append(random.randint(0, 100))
+    
+    print(array)
+    time1 = time.time()
+    dqsort(array, 0, len(array) - 1, 17)
+    #insertionSort(array, 0, len(array) - 1)
+    time2 = time.time()
+
+    print(f"{time2 - time1:.10f}")
+    print(array)
+
+def sort(size, n):
+    print("Dual pivot quicksort + Insertion sort algorithm. size: ", size)
+    array = []
+    for i in range(size):
+        array.append(random.randint(0, 200))
+    start = time.time()
+    dqsort(array, 0, len(array) - 1, n)
+    end = time.time()
+    print(f"{end - start:.10f}")
+
+if __name__ == "__main__":
+    main()
